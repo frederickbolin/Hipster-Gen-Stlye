@@ -9,11 +9,13 @@ import './App.css';
 
 import HomePage from './pages/homepage/homepage.component';
 import ShopPage from "./pages/shop/shop.component.jsx";
-
+import Header from "./components/header-component/header.component.jsx";
+// Now all I had to do was to place <Header> outside of <switch> and <routes> that contains all of our page components. That means our <Header> will always be present/render despite what our <switch> and <route> components will render their selfs on the user page.
 
 function App() {
   return (
     <div>
+      <Header />
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route path="/shop" component={ShopPage} />
