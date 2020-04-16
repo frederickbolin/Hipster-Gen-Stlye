@@ -1,13 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import { auth } from "../../firebase/firebase.utils";
+
 import { ReactComponent as Logo} from "../../assets/crown.svg"
 // Because this isnt a JSX file we dont actually set the import, Im just importing in this crown.svg as ReactComponent key word but setting that as LOGO key word for now.
 // now by doing this. I can now place <Logo></Logo> anywhere on this file.
 
 import "./header.styles.scss";
 
-const Header = () => (
+const Header = ({ currentUser }) => (
   <div className="header">
     <Link className="logo-container" to="/">
       <Logo className="logo" />
@@ -19,6 +21,16 @@ const Header = () => (
       <Link className="option" to="/shop">
         CONTACT
       </Link>
+      {
+        currentUser ?
+        <div className="option" onClick={() => auth.signOut()}>
+          Sign Out
+          </div>
+        :
+        <Link className="option" to="/signin">
+          Sign In
+        </Link>
+      }
     </div>
   </div>
 );
