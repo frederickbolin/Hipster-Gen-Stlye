@@ -12,7 +12,7 @@ import ShopPage from "./pages/shop/shop.component";
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component.jsx';
 import Header from "./components/header-component/header.component";
 // Now all I had to do was to place <Header> outside of <switch> and <routes> that contains all of our page components. That means our <Header> will always be present/render despite what our <switch> and <route> components will render their selfs on the user page.
-import { auth } from "./firebase/firebase.utils";
+import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 
 class App extends React.Component {
   constructor() {
@@ -27,12 +27,28 @@ class App extends React.Component {
   
 
   componentDidMount() {
-    this.unsubsribeFromAuth = auth.onAuthStateChanged(user => {
-      this.setState({ currentUser: user });
+    this.unsubsribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth);
+
+        userRef.onSnapshot(snapShot => {
+          this.setState({
+            currentUser: {
+              id: snapShot.id,
+              ...snapShot.data()
+            }
+          });
+
+          console.log(this.state);
+        });
+        // This whole scope is related to the firebase library. And also a mix and matched the firebase.auth library and firebase.store library together to create new objects from my data base and bring em back in then store em.
+      }
+      this.setState({currentUser: userAuth});
+      
+      //this.setState({ currentUser: user });
       // This inner scope auth.onAuthStateChanged(user => {
       // this.setState({ currentUser: user }) is an open messaging system between the firebase app and the application Ive created .this scope saves users authentication if brower refresh, exit tab, ect.. on same device. this also means its an open subscription, then we have to write code to close subscription when unmounted to not have any memory leaks in jave app.
-      console.log(user);
-    })
+    });
   }
 
   componentWillUnmount() {
