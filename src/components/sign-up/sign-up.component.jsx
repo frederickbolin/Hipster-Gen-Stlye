@@ -62,20 +62,20 @@ class SignUp extends React.Component {
         <span>Sign up with your email and password</span>
         <form className="sign-up-form" onSubmit={this.handleSubmit}>
           <FromInput
-            type="text"
-            name="display"
-            value={email}
-            onChange={this.handleChange}
-            label="Email"
-            require
+          type="email"
+          name="email"
+          value={email}
+          onChange={this.handleChange}
+          label="Email"
+          required
           />
           <FromInput
-            type="password"
-            name="password"
-            value={password}
-            onChange={this.handleChange}
-            label="Password"
-            require
+          type="password"
+          name="password"
+          value={password}
+          onChange={this.handleChange}
+          label="Password"
+          required
           />
           <FromInput
           type="password"
@@ -83,20 +83,20 @@ class SignUp extends React.Component {
           value={confirmPassword}
           onChange={this.handleChange}
           label="ConfirmPassword"
-          require
+          required
           />
           <FromInput
           type="text"
-          name="display"
+          name="displayName"
           value={displayName}
           onChange={this.handleChange}
           label="Display Name"
-          require
+          required
           /> 
           <CustomButton type="submit">Sign Up</CustomButton>
         </form>
       </div>
-    )
+    );
   }
 }
 
