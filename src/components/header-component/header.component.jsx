@@ -21,20 +21,20 @@ const Header = ({ currentUser }) => (
       <Link className="option" to="/shop">
         CONTACT
       </Link>
-      {
-        currentUser ?
-        <div className="option" onClick={() => auth.signOut()}>
+      {currentUser ? (
+          <div className="option" onClick={() => auth.signOut()}>
           Sign Out
           </div>
-        :
-        <Link className="option" to="/signin">
+        ) : (
+          <Link className="option" to="/signin">
           Sign In
-        </Link>
-      }
+          </Link>
+        )}
     </div>
-  </div>
+  </div> 
 );
 
+       
 // Have to now place <Header /> (like that) witch also has the <Logo /> emblem into App.js folder so <Header> will always render and be present to users.
 
 export default Header;
