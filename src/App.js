@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from "react-router-dom"
+import { Switch, Route, Redirect } from "react-router-dom"
   // COMPONENT Meaning: 
   // {Switch}= Is really IMPORTANT, to use Switch, we wrap our route components
   // within it. Once it matchs the first exact path
@@ -58,21 +58,36 @@ class App extends React.Component {
           <Route exact path="/" component={HomePage} />
           <Route path="/shop" component={ShopPage} />
           {/* Had to use a class component for {ShopPage} because I will need to store what the users inputs will be. */}
-          <Route path="/signin" component={SignInAndSignUpPage} />
+          <Route 
+            exact 
+            path="/signin" 
+            render={() => 
+            this.props.currentUser ? (
+              <Redirect to="/" />
+            ) : (
+            <SignInAndSignUpPage />
+            )
+          }
+        />
           {/* FUNCTIONS/COMPONENT Meaning: 
           (exact)= needs only a boolean true or false,
           if nothing is writen its automatically true. 
           (path)= will be a string like "/shop" that will be equal to the path in the current place url.
           (componet)= will be the page we want 
-          to render to the users like {HatsPage} or {ShopPage} in our jsx files. */}
+          to render to the users like {HatsPage} or {ShopPage} in our jsx files.  */}
         </Switch>
       </div>
     );
   }
 }
-const mapDispatchToProps =dispatch => ({
+
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser
+})
+
+const mapDispatchToProps = dispatch => ({
   setCurrentUser: user => dispatch(setCurrentUser(user))
 })
 
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
