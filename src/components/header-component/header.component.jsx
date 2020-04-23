@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { connect, connectAdvanced } from "react-redux";
 
 import { auth } from "../../firebase/firebase.utils";
+import CartIcon from "../cart-icon/cart-icon.component";
 
 import { ReactComponent as Logo} from "../../assets/crown.svg"
 // Because this isnt a JSX file we dont actually set the import, Im just importing in this crown.svg as ReactComponent key word but setting that as LOGO key word for now.
@@ -31,6 +32,7 @@ const Header = ({ currentUser }) => (
           Sign In
           </Link>
         )}
+        <CartIcon />
     </div>
   </div> 
 );
