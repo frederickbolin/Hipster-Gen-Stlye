@@ -4,6 +4,7 @@ import { Switch, Route } from "react-router-dom"
   // {Switch}= Is really IMPORTANT, to use Switch, we wrap our route components
   // within it. Once it matchs the first exact path
   // it wont render anything else useless its exactly the same /id/url.
+import { connect } from "react-redux";
 
 import './App.css';
 
@@ -13,37 +14,29 @@ import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up
 import Header from "./components/header-component/header.component";
 // Now all I had to do was to place <Header> outside of <switch> and <routes> that contains all of our page components. That means our <Header> will always be present/render despite what our <switch> and <route> components will render their selfs on the user page.
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
+import { setCurrentUser } from './redux/user/user.actions';
 
 class App extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      currentUser: null
-    }
-  }
-
   unsubsribeFromAuth = null;
   
 
   componentDidMount() {
+
+    const {setCurrentUser} = this.props;
     this.unsubsribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
 
         userRef.onSnapshot(snapShot => {
-          this.setState({
-            currentUser: {
-              id: snapShot.id,
-              ...snapShot.data()
-            }
+          setCurrentUser({
+            id: snapShot.id,
+            ...snapShot.data()
+            // This in snapshot means whenever the user snapshop updates it sets the user value with new object.
           });
-
-          console.log(this.state);
         });
         // This whole scope is related to the firebase library. And also a mix and matched the firebase.auth library and firebase.store library together to create new objects from my data base and bring em back in then store em.
       }
-      this.setState({currentUser: userAuth});
+      setCurrentUser(userAuth);
       
       //this.setState({ currentUser: user });
       // This inner scope auth.onAuthStateChanged(user => {
@@ -59,7 +52,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Header currentUser={this.state.currentUser} />
+        <Header />
         {/* <Header/> was placed here, outside of switch and route to always show on any page. */}
         <Switch>
           <Route exact path="/" component={HomePage} />
@@ -77,6 +70,9 @@ class App extends React.Component {
     );
   }
 }
+const mapDispatchToProps =dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))
+})
 
 
-export default App;
+export default connect(null, mapDispatchToProps)(App);

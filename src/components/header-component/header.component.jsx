@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { connect, connectAdvanced } from "react-redux";
 
 import { auth } from "../../firebase/firebase.utils";
 
@@ -34,9 +35,13 @@ const Header = ({ currentUser }) => (
   </div> 
 );
 
+const mapStateToProps = state => ({
+  currentUser: state.user.currentUser
+});
+
        
 // Have to now place <Header /> (like that) witch also has the <Logo /> emblem into App.js folder so <Header> will always render and be present to users.
 
-export default Header;
+export default connect(mapStateToProps) (Header);
 
 
