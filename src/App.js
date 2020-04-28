@@ -5,16 +5,20 @@ import { Switch, Route, Redirect } from "react-router-dom"
   // within it. Once it matchs the first exact path
   // it wont render anything else useless its exactly the same /id/url.
 import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
 
 import './App.css';
 
 import HomePage from './pages/homepage/homepage.component';
 import ShopPage from "./pages/shop/shop.component";
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component.jsx';
+import CheckoutPage from "./pages/checkout/checkout.component";
+
 import Header from "./components/header-component/header.component";
 // Now all I had to do was to place <Header> outside of <switch> and <routes> that contains all of our page components. That means our <Header> will always be present/render despite what our <switch> and <route> components will render their selfs on the user page.
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 import { setCurrentUser } from './redux/user/user.actions';
+import { selectCurrentUser } from "./redux/user/user.selectors";
 
 class App extends React.Component {
   unsubsribeFromAuth = null;
@@ -58,6 +62,7 @@ class App extends React.Component {
           <Route exact path="/" component={HomePage} />
           <Route path="/shop" component={ShopPage} />
           {/* Had to use a class component for {ShopPage} because I will need to store what the users inputs will be. */}
+          <Route exact path="/checkout" component={CheckoutPage} />
           <Route 
             exact 
             path="/signin" 
@@ -81,13 +86,13 @@ class App extends React.Component {
   }
 }
 
-const mapStateToProps = ({ user }) => ({
-  currentUser: user.currentUser
-})
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser
+});
 
 const mapDispatchToProps = dispatch => ({
   setCurrentUser: user => dispatch(setCurrentUser(user))
-})
+});
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
