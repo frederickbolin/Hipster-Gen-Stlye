@@ -1,19 +1,20 @@
-import React from "react";
+import React from 'react';
 
-import "./form-input.styles.scss";
+import './form-input.styles.scss';
 
 const FormInput = ({ handleChange, label, ...otherProps }) => (
-  <div className="group">
-    <input className="form-input" onChange={handleChange} {...otherProps} />
-    {
-      label ?
-      (<label className={`${otherProps.value.length ? "shrink" : ""} form-input-label`}>
+  <div className='group'>
+    <input className='form-input' onChange={handleChange} {...otherProps} />
+    {label ? (
+      <label
+        className={`${
+          otherProps.value.length ? 'shrink' : ''
+        } form-input-label`}
+      >
       {/* Breakdown for this Scope: This <label> will always have the className{form-input-label}, but Ive also added the shrink property whenever the user has typed anything in, its mainly for certain broswer to auto-complete when user get to the portain of signin page. */}
         {label}
-
-      </label>)
-      : null
-    }
+      </label>
+    ) : null}
   </div>
 );
 
